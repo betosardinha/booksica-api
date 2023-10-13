@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  booksica-db:
+    image: postgres
+    container_name: booksica-db
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "booksica_api_development"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "5432:5432"
+    networks:
+      - booksica-api-network
+
+  booksica-pgadmin:
+    image: dpage/pgadmin4
+    container_name: booksica-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "user@booksica.com"
+      PGADMIN_DEFAULT_PASSWORD: "password"
+    ports:
+      - "15432:80"
+    depends_on:
+      - booksica-db
+    networks:
+      - booksica-api-network
+
+  booksica-api:
+    image: booksica-api
+    container_name: booksica-api
+    build: .
+    environment:
+      - DBHOST=booksica-db
+      - DBUSER=postgres
+      - DBPASS=password
+    volumes:
+      - .:/booksica-api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - booksica-db
+    networks:
+      - booksica-api-network
+
+networks:
+  booksica-api-network:
+    driver: bridge
+
+volumes:
+  postgres:
