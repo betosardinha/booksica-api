@@ -1,0 +1,12 @@
+# Importar as configurações
+require:
+  - rubocop-rspec
+  - rubocop-rails
+  - rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 3.2.0 # Adicionar versão do ruby
+  NewCops: enable # Habilitar novos cops
+
+Style/Documentation:
+  Enabled: false # Desabilitar cop de documentação
