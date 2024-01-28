@@ -3,7 +3,9 @@
 FROM ruby:3.2.0
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y postgresql-client
+    apt-get install --no-install-recommends -y \
+    postgresql-client \
+    cmake
 
 RUN bundle config --global frozen 1
 
