@@ -10,8 +10,68 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 0) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_24_234848) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
+  create_table "authors", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "name", limit: 100, null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uuid"], name: "index_authors_on_uuid", unique: true
+  end
+
+  create_table "book_authors", force: :cascade do |t|
+    t.integer "book_id", null: false
+    t.integer "author_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id", "author_id"], name: "index_book_authors_on_book_id_and_author_id", unique: true
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "title", limit: 50, null: false
+    t.string "subtitle", limit: 100
+    t.string "book_type", limit: 10, null: false
+    t.integer "parent_id"
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uuid"], name: "index_books_on_uuid", unique: true
+  end
+
+  create_table "editions", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "isbn", limit: 13, null: false
+    t.string "format", limit: 10, null: false
+    t.text "description"
+    t.integer "year", null: false
+    t.integer "pages"
+    t.integer "book_id", null: false
+    t.integer "publisher_id", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["isbn", "format"], name: "index_editions_on_isbn_and_format", unique: true
+    t.index ["uuid"], name: "index_editions_on_uuid", unique: true
+  end
+
+  create_table "publishers", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "name", limit: 100, null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uuid"], name: "index_publishers_on_uuid", unique: true
+  end
+
+  add_foreign_key "book_authors", "authors", on_delete: :cascade
+  add_foreign_key "book_authors", "books", on_delete: :cascade
+  add_foreign_key "books", "books", column: "parent_id", on_delete: :cascade
+  add_foreign_key "editions", "books", on_delete: :cascade
+  add_foreign_key "editions", "publishers", on_delete: :cascade
 end

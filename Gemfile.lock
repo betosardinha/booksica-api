@@ -211,6 +211,7 @@ GEM
       rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
+    securerandom (0.3.1)
     stringio (3.0.8)
     thor (1.2.2)
     timeout (0.4.0)
@@ -236,6 +237,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
+  securerandom (~> 0.3.1)
   tzinfo-data
 
 RUBY VERSION
