@@ -27,11 +27,13 @@ group :development, :test do
 end
 
 group :test do
+  gem 'database_cleaner-active_record', '~> 2.1'
   gem 'factory_bot_rails', '~> 6.4', '>= 6.4.3'
   gem 'faker', '~> 3.2', '>= 3.2.3'
   gem 'rspec-rails', '~> 6.1', '>= 6.1.1'
   gem 'shoulda-matchers', '~> 6.1'
   gem 'simplecov', '~> 0.22.0'
+  gem 'simplecov-html', '~> 0.12.3'
   gem 'simplecov-lcov', '~> 0.8.0'
   gem 'undercover', '~> 0.5.0'
   gem 'webmock', '~> 3.19', '>= 3.19.1'
